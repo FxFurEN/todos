@@ -28,7 +28,7 @@ import AppAddTodo from './components/AppAddTodo.vue';
 import AppFooter, { Stats } from './components/AppFooter.vue';
 import { Todo } from './types/Todo';
 import { Filter } from './types/Filter';
-import {testAPIGet, testAPIPost} from './components/api/api';
+import {todoAPI} from './components/api/api';
 
 interface State {
   todos: Todo[],
@@ -43,13 +43,12 @@ export default defineComponent({
     AppAddTodo,
     AppFooter,
   },
+  created() {
+    this.fetchTodos(); // Вызов при загрузке компонента
+  },
   data(): State {
     return {
-      todos: [
-        { id: 0, text: 'Learn the basics of Vue', completed: true },
-        { id: 1, text: 'Learn the basics of Typescript', completed: false },
-        { id: 2, text: 'Subscribe to the channel', completed: false },
-      ],
+      todos: [],
       activeFilter: 'All'
     }
   },
@@ -79,21 +78,47 @@ export default defineComponent({
     }
   },
   methods: {
-    addTodo(todo: Todo) {
-      testAPIPost.test(1,'test')
-      testAPIGet.test()
-      this.todos.push(todo)
-    },
-    toggleTodo(id: number) {
-      const targetTodo = this.todos.find((todo: Todo) => todo.id === id)
-
-      if (targetTodo) {
-        targetTodo.completed = !targetTodo.completed
+    async fetchTodos() {
+      try {
+        const response = await todoAPI.getAllTodos();
+        this.todos = response.data; 
+      } catch (error) {
+        console.error('Error fetching todos:', error);
       }
     },
-    removeTodo(id: number) {
-      this.todos = this.todos.filter((todo: Todo) => todo.id !== id)
+
+
+    async addTodo(todo: Todo) {
+      try {
+        const response = await todoAPI.addTodoToDB(todo);
+        const addedTodo = response.data;
+        this.todos.push(addedTodo);
+        await this.fetchTodos();
+      } catch (error) {
+        console.error('Error adding todo to DB:', error);
+      }
     },
+
+    async removeTodo(id: number) {
+      try {
+        await todoAPI.removeTodoFromDB(id);
+        await this.fetchTodos(); 
+      } catch (error) {
+        console.error('Error removing todo from DB:', error);
+      }
+    },
+
+
+    async toggleTodo(id: number) {
+      try {
+        await todoAPI.toggleTodoInDB(id);
+        await this.fetchTodos();
+      } catch (error) {
+        console.error('Error toggling todo in DB:', error);
+      }
+    },
+
+
     setFilter(filter: Filter) {
       this.activeFilter = filter
     }
