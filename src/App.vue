@@ -28,6 +28,7 @@ import AppAddTodo from './components/AppAddTodo.vue';
 import AppFooter, { Stats } from './components/AppFooter.vue';
 import { Todo } from './types/Todo';
 import { Filter } from './types/Filter';
+import {testAPIGet, testAPIPost} from './components/api/api';
 
 interface State {
   todos: Todo[],
@@ -79,6 +80,8 @@ export default defineComponent({
   },
   methods: {
     addTodo(todo: Todo) {
+      testAPIPost.test(1,'test')
+      testAPIGet.test()
       this.todos.push(todo)
     },
     toggleTodo(id: number) {
