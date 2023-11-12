@@ -1,6 +1,6 @@
 # Todos - простой планировщий задач
 
-Учебный проект для изучения разработки на Vue 3 и TypeScript. 
+Форк учебного проекта для изучения разработки на Vue 3 и TypeScript с добавление работы с бд. 
 
 Стек: 
 - HTML
@@ -8,6 +8,7 @@
 - Vue 3 (Options API)
 - TypeScript
 - Vue CLI
+- Axios
 
 ## Project setup
 ```
