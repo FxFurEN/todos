@@ -10,6 +10,9 @@
 - Vue CLI
 - Axios
 
+Backend
+- https://github.com/FxFurEN/back-todos
+
 ## Project setup
 ```
 npm install
